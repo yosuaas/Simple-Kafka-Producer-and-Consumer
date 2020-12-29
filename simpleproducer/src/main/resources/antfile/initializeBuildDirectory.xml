@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<project>
+
+    <property file="${basedir}/src/main/resources/antfile/properties/initializeBuildDirectory.properties" />
+
+
+    <target name="initialize-workspace">
+        <echo message="Cleaning up old build directory" />
+        <delete includeEmptyDirs="true" failonerror="false">
+            <fileset dir="./target/build/master" />
+            <fileset dir="${workspace.path}" />
+        </delete>
+
+        <echo message="Creating build directory" />
+        <mkdir dir="${workspace.path}" />
+        <mkdir dir="${log.path}" />
+        <mkdir dir="${config.path}" />
+    </target>
+
+    <target name="copy-jar-to-workspace">
+        <echo message="Copying JAR to working directory" />
+        <move file="${basedir}/target/${maven.project.finalname}.jar" todir="${workspace.path}" />
+    </target>
+
+    <target name="copy-application-properties-to-workspace">
+        <echo message="Copying application-properties to workspace" />
+        <copy file="${basedir}/src/main/resources/application.properties" tofile="${config.path}/application.properties" />
+    </target>
+
+    <target name="generate-run-script">
+        <echo message="Generating run script" />
+        <touch file="${workspace.path}/run.sh" />
+        <echo file="${workspace.path}/run.sh">
+#!/bin/sh
+java -server -Xmx1G -jar -Dspring.config.location=config/application.properties ${maven.project.finalname}.jar >/dev/null 2>&amp;1 &amp;
+echo "started"
+                </echo>
+
+        <touch file="${workspace.path}/run.bat"/>
+        <echo file="${workspace.path}/run.bat">
+java -Xmx1G -jar -Dspring.config.location=config/application.properties ^
+${maven.project.finalname}.jar
+    </echo>
+    </target>
+
+</project>
