@@ -1,4 +1,4 @@
-# Spring Boot with Kafka Producer Example
+# Spring Boot with Kafka Producer & Consumer Example
 
 Simple kafka producer / consumer using Spring Boot.
 
